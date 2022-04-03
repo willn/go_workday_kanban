@@ -1,0 +1,37 @@
+body {
+	margin: 20px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.errors {
+	background-color: #fcc;
+}
+
+section {
+	border-bottom: 1px dashed #ccc;
+	margin-bottom: 20px;
+	page-break-after: auto;
+	page-break-before: auto;
+	page-break-inside: avoid;
+}
+section .main {
+	/* font-size: 22px; */
+	margin: auto;
+	width: 70%;
+}
+section h1 {
+	
+}
+section h1, section h2 {
+	font-weight: normal;
+}
+
+section .lower {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+section .lower_left div, section .lower_right div {
+	font-size: 18px;
+	padding: 10px;
+}
