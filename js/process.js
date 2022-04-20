@@ -47,8 +47,9 @@ var render = function(jobList) {
 			return `${html}${entry}`;
 		});
 
-		errorMsg = `<section class="errors">
+		errorMsg = `<section id="errors">
 			<h1>Errors</h1>
+			<a href="#" id="hide_errors">Close</a>
 			<ol>${errorMsg}</ol>
 		</section>`;
 	}
@@ -113,4 +114,18 @@ var getData = function(url) {
 };
 
 getData(url);
+
+/**
+ * Add listener for "hide errors" link
+ */
+document.addEventListener('click', function (event) {
+	if (!event.target.matches('#hide_errors')) {
+		return;
+	}
+	event.preventDefault();
+
+	var errorsDiv = document.querySelector('#errors');
+	errorsDiv.parentNode.removeChild(errorsDiv);
+}, false);
+
 
