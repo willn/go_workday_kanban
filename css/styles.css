@@ -19,8 +19,8 @@ section .main {
 	margin: auto;
 	width: 70%;
 }
-section h1 {
-	
+section h2 {
+	font-size: 3em;
 }
 section h1, section h2 {
 	font-weight: normal;
