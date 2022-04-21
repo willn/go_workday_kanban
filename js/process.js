@@ -21,7 +21,7 @@ var required = {
  * Render the array of objects into HTML.
  */
 var render = function(jobList) {
-	var errors = [];
+	var errorsByJob = [];
 	var renderedJobs = '';
 
 	jobList.forEach(function(job) {
@@ -32,18 +32,23 @@ var render = function(jobList) {
 			return;
 		}
 
+		var errors = [];
 		for (var key in required) {
 			if (!(key in job) || (job[key].length === 0)) {
-				errors.push(`<li>job: "${job['Committee']}" "${job['Job Name']}" is missing required field: ${required[key]}</li>`);
+				errors.push(required[key]);
 			}
 		}
 
+		if (errors.length) {
+			var msg = errors.join(' & ');
+			errorsByJob.push(`<li>job: "${job['Committee']}" "${job['Job Name']}" is missing: [${msg}]</li>`);
+		}
 		renderedJobs += renderJob(job);
 	});
 
 	var errorMsg = '';
-	if (errors.length) {
-		errorMsg += errors.reduce(function(html, entry) {
+	if (errorsByJob.length) {
+		errorMsg += errorsByJob.reduce(function(html, entry) {
 			return `${html}${entry}`;
 		});
 
@@ -91,7 +96,6 @@ var renderJob = function(job) {
 var evaluate = function(data) {
 	var parsed = parse(data);
 	var header = parsed.shift();
-	console.log(header);
 	var jobList = [];
 
 	parsed.forEach(function(jobEntry) {
