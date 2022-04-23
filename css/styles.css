@@ -8,7 +8,6 @@ body {
 }
 
 section {
-	border-bottom: 1px dashed #ccc;
 	margin-bottom: 20px;
 	page-break-after: auto;
 	page-break-before: auto;
@@ -18,6 +17,9 @@ section .main {
 	/* font-size: 22px; */
 	margin: auto;
 	width: 70%;
+}
+section .more {
+	padding-left: 50px;
 }
 section h2 {
 	font-size: 3em;
