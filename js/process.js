@@ -24,9 +24,11 @@ var render = function(jobList) {
 	var errorsByJob = [];
 	var renderedJobs = '';
 	var committees = {};
+	var committeeLinks = [];
 	var committeeNav = [];
 	var errorMsg = '';
 	var filtered = window.location.search.replace('?filter=', '');
+	var clearFilter = '';
 
 	// collect errors, rendered, and list of committees for nav
 	jobList.forEach(function(job) {
@@ -37,7 +39,10 @@ var render = function(jobList) {
 			return;
 		}
 
-		committees[job['Committee']] = 1;
+		if (!committees[job['Committee']]) {
+			committees[job['Committee']] = 0;
+		}
+		committees[job['Committee']]++;
 
 		// don't render if job does not match filter
 		if (filtered && (filtered !== job['Committee'])) {
@@ -51,6 +56,7 @@ var render = function(jobList) {
 				errors.push(required[key]);
 			}
 		}
+
 		if (errors.length) {
 			var msg = errors.join(' & ');
 			errorsByJob.push(`<li>job: "${job['Committee']}" "${job['Job Name']}" is missing: [${msg}]</li>`);
@@ -65,7 +71,7 @@ var render = function(jobList) {
 			return `${prev}${entry}`;
 		});
 
-		errorMsg = `<section id="errors">
+		errorMsg = `<section id="errors" class="no_print">
 			<h1>Errors</h1>
 			<a href="#" id="hide_errors">Close</a>
 			<ol>${errorMsg}</ol>
@@ -74,10 +80,21 @@ var render = function(jobList) {
 
 	// generate a nav list for filtering
 	Object.keys(committees).forEach(function(entry) {
-		committeeNav.push(`<a href="?filter=${entry}">${entry}</a>`);
+		var count = committees[entry];
+		committeeLinks.push(`<a href="?filter=${entry}">${entry} (${count})</a>`);
 	});
 
-	document.body.innerHTML = errorMsg + committeeNav.join(' ') + renderedJobs;
+	if (committeeLinks.length) {
+		if (filtered) {
+			clearFilter = `<a href="${window.location.origin}${window.location.pathname}">Show all</a>`;
+		}
+
+		committeeNav = `<p class="no_print">
+			${committeeLinks.join(' ')}
+			${clearFilter}
+		</p>`;
+	}
+	document.body.innerHTML = errorMsg + committeeNav + renderedJobs;
 
 };
 
