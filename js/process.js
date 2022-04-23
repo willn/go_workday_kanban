@@ -23,7 +23,12 @@ var required = {
 var render = function(jobList) {
 	var errorsByJob = [];
 	var renderedJobs = '';
+	var committees = {};
+	var committeeNav = [];
+	var errorMsg = '';
+	var filtered = window.location.search.replace('?filter=', '');
 
+	// collect errors, rendered, and list of committees for nav
 	jobList.forEach(function(job) {
 		if (!('Job Name' in job)) {
 			return;
@@ -32,24 +37,32 @@ var render = function(jobList) {
 			return;
 		}
 
+		committees[job['Committee']] = 1;
+
+		// don't render if job does not match filter
+		if (filtered && (filtered !== job['Committee'])) {
+			return;
+		}
+
+		// errors
 		var errors = [];
 		for (var key in required) {
 			if (!(key in job) || (job[key].length === 0)) {
 				errors.push(required[key]);
 			}
 		}
-
 		if (errors.length) {
 			var msg = errors.join(' & ');
 			errorsByJob.push(`<li>job: "${job['Committee']}" "${job['Job Name']}" is missing: [${msg}]</li>`);
 		}
+
 		renderedJobs += renderJob(job);
 	});
 
-	var errorMsg = '';
+	// if errors exist, render them
 	if (errorsByJob.length) {
-		errorMsg += errorsByJob.reduce(function(html, entry) {
-			return `${html}${entry}`;
+		errorMsg += errorsByJob.reduce(function(prev, entry) {
+			return `${prev}${entry}`;
 		});
 
 		errorMsg = `<section id="errors">
@@ -58,7 +71,13 @@ var render = function(jobList) {
 			<ol>${errorMsg}</ol>
 		</section>`;
 	}
-	document.body.innerHTML = errorMsg + renderedJobs;
+
+	// generate a nav list for filtering
+	Object.keys(committees).forEach(function(entry) {
+		committeeNav.push(`<a href="?filter=${entry}">${entry}</a>`);
+	});
+
+	document.body.innerHTML = errorMsg + committeeNav.join(' ') + renderedJobs;
 
 };
 
@@ -72,19 +91,19 @@ var renderJob = function(job) {
 		<h1>${job['Committee']}</h1>
 		<h2>${job['Job Name']}</h2>
 		<p class="desc">${job['Job Description']}</p>
-		<p class="supplies">Supplies: ${job['Supplies Needed']} Location: ${job['Where will the supplies be for the job on the work day?']}</p>
+		<p class="supplies">Supplies: ${job['Supplies Needed']} <span class="more">Location: ${job['Where will the supplies be for the job on the work day?']}</span></p>
 	</div>
 
 	<div class="lower">
 		<div class="lower_left">
-			<div>honcho: ${job['Honcho (leader who gives direction/provides supplies for project)']}</div>
-			<div># workers: ${job['Number of workers: if Honcho is working this job then include them in this count.']}</div>
-			<div>time: ${job['How long will it take per worker?']}</div>
+			<div>Honcho: ${job['Honcho (leader who gives direction/provides supplies for project)']}</div>
+			<div># Workers: ${job['Number of workers: if Honcho is working this job then include them in this count.']}</div>
+			<div>Time: ${job['How long will it take per worker?']}</div>
 		</div>
 
 		<div class="lower_right">
-			<div>priority: ${job['Priority - Indicate: Low, Medium, or High']}</div>
-			<div>work day: ${job['Which work day: Sunday April 24, or Saturday May 14, or Flexible']}</div>
+			<div>Priority: ${job['Priority - Indicate: Low, Medium, or High']}</div>
+			<div>Work day: ${job['Which work day: Sunday April 24, or Saturday May 14, or Flexible']}</div>
 		</div>
 	</div>
 </section>`;
