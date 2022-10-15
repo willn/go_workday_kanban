@@ -3,7 +3,10 @@
  * Kanban cards for the Great Oak workday.
  */
 
-var url = 'https://docs.google.com/spreadsheets/d/15vNsL7VipkGY6FPpiNiRRNxgXt3x8-7a0J1fQaHLTfI/gviz/tq?tqx=out:csv&sheet=jobs';
+var url = 'https://docs.google.com/spreadsheets/d/1NIjznKI2tKZ781KXwi2RWjRcLU4F2j-6PY2QE9ttK3E/gviz/tq?tqx=out:csv&sheet=Sheet1';
+
+var whichDay = 'Which Work Day: Sunday, October 16,  Saturday, October 22, or Flexible';
+
 var required = {
 	"Committee": "Committee",
 	"Job Name": "Job Name",
@@ -14,8 +17,11 @@ var required = {
 	"Number of workers: if Honcho is working this job then include them in this count.": "# workers",
 	"How long will it take per worker?": "time",
 	"Priority - Indicate: Low, Medium, or High": "priority",
-	"Which work day: Sunday April 24, or Saturday May 14, or Flexible": "work day",
+	whichDay: "work day",
 };
+
+
+
 
 /**
  * Render the array of objects into HTML.
@@ -33,6 +39,8 @@ var render = function(jobList) {
 	// collect errors, rendered, and list of committees for nav
 	jobList.forEach(function(job) {
 		if (!('Job Name' in job)) {
+			console.log('missing Job Name');
+			console.log({job});
 			return;
 		}
 		if (job['Job Name'].length === 0) {
@@ -120,7 +128,7 @@ var renderJob = function(job) {
 
 		<div class="lower_right">
 			<div>Priority: ${job['Priority - Indicate: Low, Medium, or High']}</div>
-			<div>Work day: ${job['Which work day: Sunday April 24, or Saturday May 14, or Flexible']}</div>
+			<div>Work day: ${job[whichDay]}</div>
 		</div>
 	</div>
 </section>`;
@@ -136,7 +144,7 @@ var evaluate = function(data) {
 
 	parsed.forEach(function(jobEntry) {
 		var merged = header.reduce((obj, key, index) =>
-			({ ...obj, [key]: jobEntry[index] }), {}
+			({ ...obj, [key.trim()]: jobEntry[index].trim() }), {}
 		);
 		jobList.push(merged);
 	});
