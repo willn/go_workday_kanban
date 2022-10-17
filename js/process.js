@@ -5,7 +5,6 @@
 
 var url = 'https://docs.google.com/spreadsheets/d/1NIjznKI2tKZ781KXwi2RWjRcLU4F2j-6PY2QE9ttK3E/gviz/tq?tqx=out:csv&sheet=Sheet1';
 
-var whichDay = 'Which Work Day: Sunday, October 16,  Saturday, October 22, or Flexible';
 
 var required = {
 	"Committee": "Committee",
@@ -17,7 +16,7 @@ var required = {
 	"Number of workers: if Honcho is working this job then include them in this count.": "# workers",
 	"How long will it take per worker?": "time",
 	"Priority - Indicate: Low, Medium, or High": "priority",
-	whichDay: "work day",
+	'Which Work Day: Sunday, October 16,  Saturday, October 22, or Flexible': "work day",
 };
 
 
@@ -59,7 +58,11 @@ var render = function(jobList) {
 
 		// errors
 		var errors = [];
+		console.log({required});
 		for (var key in required) {
+			if (!(key in job)) {
+				console.log({"key": key, "job": job, "jobkey": job[key]});
+			}
 			if (!(key in job) || (job[key].length === 0)) {
 				errors.push(required[key]);
 			}
@@ -128,7 +131,7 @@ var renderJob = function(job) {
 
 		<div class="lower_right">
 			<div>Priority: ${job['Priority - Indicate: Low, Medium, or High']}</div>
-			<div>Work day: ${job[whichDay]}</div>
+			<div>Work day: ${job['Which Work Day: Sunday, October 16,  Saturday, October 22, or Flexible']}</div>
 		</div>
 	</div>
 </section>`;

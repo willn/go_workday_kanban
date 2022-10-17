@@ -8,10 +8,13 @@ body {
 }
 
 section {
+	margin-top: 35px;
 	margin-bottom: 20px;
 	page-break-after: auto;
 	page-break-before: auto;
 	page-break-inside: avoid;
+
+	height: 450px;
 }
 section .main {
 	/* font-size: 22px; */
