@@ -13,8 +13,6 @@ section {
 	page-break-after: auto;
 	page-break-before: auto;
 	page-break-inside: avoid;
-
-	height: 450px;
 }
 section .main {
 	/* font-size: 22px; */

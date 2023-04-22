@@ -3,7 +3,9 @@
  * Kanban cards for the Great Oak workday.
  */
 
-var url = 'https://docs.google.com/spreadsheets/d/1NIjznKI2tKZ781KXwi2RWjRcLU4F2j-6PY2QE9ttK3E/gviz/tq?tqx=out:csv&sheet=Sheet1';
+var url = 'https://docs.google.com/spreadsheets/d/1Fyr_uMFiQZNx1-1ff3pXnkTmnruzLSRlEX3ZA5ujBKc/';
+var googleDocSuffix = 'gviz/tq?tqx=out:csv&sheet=Sheet1';
+url += googleDocSuffix;
 
 
 var required = {
@@ -16,7 +18,9 @@ var required = {
 	"Number of workers: if Honcho is working this job then include them in this count.": "# workers",
 	"How long will it take per worker?": "time",
 	"Priority - Indicate: Low, Medium, or High": "priority",
-	'Which Work Day: Sunday, October 16,  Saturday, October 22, or Flexible': "work day",
+
+	// XXX change each season
+	'Which work day Sunday April 23  Saturday May 6 or Flexible': "work day",
 };
 
 
@@ -38,14 +42,14 @@ var render = function(jobList) {
 	// collect errors, rendered, and list of committees for nav
 	jobList.forEach(function(job) {
 		if (!('Job Name' in job)) {
-			console.log('missing Job Name');
-			console.log({job});
+			console.log('missing "Job Name" - cannot render anything without a job name');
 			return;
 		}
 		if (job['Job Name'].length === 0) {
 			return;
 		}
 
+		// initialize the dict entry?
 		if (!committees[job['Committee']]) {
 			committees[job['Committee']] = 0;
 		}
@@ -58,12 +62,10 @@ var render = function(jobList) {
 
 		// errors
 		var errors = [];
-		console.log({required});
 		for (var key in required) {
-			if (!(key in job)) {
-				console.log({"key": key, "job": job, "jobkey": job[key]});
-			}
+			// if empty
 			if (!(key in job) || (job[key].length === 0)) {
+				console.log('missing:', {"key": key, "job": job, "jobkey": job[key]});
 				errors.push(required[key]);
 			}
 		}
@@ -141,10 +143,30 @@ var renderJob = function(job) {
  * Evaluate the CSV and parse it into an array of objects.
  */
 var evaluate = function(data) {
-	var parsed = parse(data);
-	var header = parsed.shift();
-	var jobList = [];
+	var parsed = parse(data),
+		header = parsed.shift(),
+		jobList = [],
+		missing = [],
+		index = 0;
 
+	// trim whitespace
+	header = header.map(s => s.trim());
+
+	// confirm that the required keys appear in the header - quit if not
+	for (var entry in required) {
+		index = header.findIndex((element) => element === entry);
+		if (index === -1) {
+			missing.push(entry);
+		}
+	};
+	if (missing.length) {
+		document.body.innerHTML = "<h1>Unable to find the required headers</h1>" + missing.join('<br>');
+		console.log(url);
+		debugger;
+		return;
+	}
+
+	// go through the content lines
 	parsed.forEach(function(jobEntry) {
 		var merged = header.reduce((obj, key, index) =>
 			({ ...obj, [key.trim()]: jobEntry[index].trim() }), {}
