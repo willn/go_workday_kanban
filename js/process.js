@@ -8,6 +8,9 @@ var googleDocSuffix = 'gviz/tq?tqx=out:csv&sheet=Sheet1';
 url += googleDocSuffix;
 
 
+// XXX change each season
+var whichWorkDay = 'Which work day Sunday April 23  Saturday May 6 or Flexible';
+
 var required = {
 	"Committee": "Committee",
 	"Job Name": "Job Name",
@@ -18,11 +21,8 @@ var required = {
 	"Number of workers: if Honcho is working this job then include them in this count.": "# workers",
 	"How long will it take per worker?": "time",
 	"Priority - Indicate: Low, Medium, or High": "priority",
-
-	// XXX change each season
-	'Which work day Sunday April 23  Saturday May 6 or Flexible': "work day",
 };
-
+required[whichWorkDay] = "work day";
 
 
 
@@ -133,7 +133,7 @@ var renderJob = function(job) {
 
 		<div class="lower_right">
 			<div>Priority: ${job['Priority - Indicate: Low, Medium, or High']}</div>
-			<div>Work day: ${job['Which Work Day: Sunday, October 16,  Saturday, October 22, or Flexible']}</div>
+			<div>Work day: ${job[whichWorkDay]}</div>
 		</div>
 	</div>
 </section>`;
