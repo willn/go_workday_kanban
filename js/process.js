@@ -3,24 +3,25 @@
  * Kanban cards for the Great Oak workday.
  */
 
-var url = 'https://docs.google.com/spreadsheets/d/1Fyr_uMFiQZNx1-1ff3pXnkTmnruzLSRlEX3ZA5ujBKc/';
-var googleDocSuffix = 'gviz/tq?tqx=out:csv&sheet=Sheet1';
+var url = 'https://docs.google.com/spreadsheets/d/1kVZvPeqOk5yi0AJBfAYHR7UiTJC4eKc8b_F3rIomh6Q/';
+var googleDocSuffix = 'export?format=csv&gid=0';
 url += googleDocSuffix;
 
 
 // XXX change each season
-var whichWorkDay = 'Which work day Sunday April 23  Saturday May 6 or Flexible';
+var whichWorkDay = 'Which work day Sunday October 22nd or   Saturday October 28th or Flexible';
 
 var required = {
+	"Name of person supplying Info": "Reporter",
 	"Committee": "Committee",
 	"Job Name": "Job Name",
 	"Job Description": "Description",
 	"Supplies Needed": "Supplies Needed",
-	"Where will the supplies be for the job on the work day?": "Supply Location",
+	"Priority - Indicate: Low, Medium, or High": "priority",
 	"Honcho (leader who gives direction/provides supplies for project)": "Honcho",
+	"Where will the supplies be for the job on the work day?": "Supply Location",
 	"Number of workers: if Honcho is working this job then include them in this count.": "# workers",
 	"How long will it take per worker?": "time",
-	"Priority - Indicate: Low, Medium, or High": "priority",
 };
 required[whichWorkDay] = "work day";
 
@@ -162,7 +163,6 @@ var evaluate = function(data) {
 	if (missing.length) {
 		document.body.innerHTML = "<h1>Unable to find the required headers</h1>" + missing.join('<br>');
 		console.log(url);
-		debugger;
 		return;
 	}
 
@@ -181,7 +181,7 @@ var evaluate = function(data) {
  * Get the data needed.
  */
 var getData = function(url) {
-	fetch(url)
+	fetch(url, { redirect: 'follow' })
 		.then(response => response.text())
 		.then(text => evaluate(text))
 };
