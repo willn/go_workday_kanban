@@ -106,7 +106,6 @@ var render = function(jobList) {
 		committeeNav = `<p class="no_print">
 			${committeeLinks.join(' ')}
 			${clearFilter}
-			<span>(Print in landscape, 2 Pages per sheet)</span>
 		</p>`;
 	}
 	document.body.innerHTML = errorMsg + committeeNav + renderedJobs;
