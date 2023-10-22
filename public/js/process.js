@@ -37,7 +37,7 @@ var render = function(jobList) {
 	var committeeLinks = [];
 	var committeeNav = [];
 	var errorMsg = '';
-	var filtered = window.location.search.replace('?filter=', '');
+	var filtered = decodeURI(window.location.search.replace('?filter=', ''));
 	var clearFilter = '';
 
 	// collect errors, rendered, and list of committees for nav
@@ -56,7 +56,7 @@ var render = function(jobList) {
 		}
 		committees[job['Committee']]++;
 
-		// don't render if job does not match filter
+		// skip if job does not match filter
 		if (filtered && (filtered !== job['Committee'])) {
 			return;
 		}
