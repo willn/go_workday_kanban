@@ -6,6 +6,6 @@ series of kanban cards for a Great Oak Cohousing workday.
 
 ## Each season
 
-1. Update the source spreadsheet link
-2. Compare the list of headers, update the one mentioning workdates
+1. Edit `public/js/process.js`
+2. Follow the steps for "Directions to follow each season"
 

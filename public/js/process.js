@@ -1,15 +1,21 @@
 /**
  * A set of javascript utilities for parsing CSV and generating a series of
  * Kanban cards for the Great Oak workday.
+ *
+ * Directions to follow each season:
+ * 1. update the URL
+ * 2. update the whichWorkDay variable with the new header name
+ * 3. push it live, and check the results
  */
 
-var url = 'https://docs.google.com/spreadsheets/d/1kVZvPeqOk5yi0AJBfAYHR7UiTJC4eKc8b_F3rIomh6Q/';
+// 
+var url = 'https://docs.google.com/spreadsheets/d/1SEXMnsKjhkz-LphOCpgR8Ro5MFopQTMgB2PrTJ1DPtE/';
 var googleDocSuffix = 'export?format=csv&gid=0';
 url += googleDocSuffix;
 
 
 // XXX change each season
-var whichWorkDay = 'Which work day Sunday October 22nd or   Saturday October 28th or Flexible';
+var whichWorkDay = 'Which work day Saturday, April 27th or Sunday, May 5th or Flexible';
 
 var required = {
 	"Name of person supplying Info": "Reporter",
@@ -162,7 +168,7 @@ var evaluate = function(data) {
 	};
 	if (missing.length) {
 		document.body.innerHTML = "<h1>Unable to find the required headers</h1>" + missing.join('<br>');
-		console.log(url);
+		console.log({missing, parsed, header, url});
 		return;
 	}
 
