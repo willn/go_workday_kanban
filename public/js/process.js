@@ -9,13 +9,13 @@
  */
 
 // 
-var url = 'https://docs.google.com/spreadsheets/d/1SEXMnsKjhkz-LphOCpgR8Ro5MFopQTMgB2PrTJ1DPtE/';
+var url = 'https://docs.google.com/spreadsheets/d/1uxs0P2CMhz4cOMPSHReiZ4gdN5tBAGxUJ4_-JEukzqQ/';
 var googleDocSuffix = 'export?format=csv&gid=0';
 url += googleDocSuffix;
 
 
 // XXX change each season
-var whichWorkDay = 'Which work day Saturday, April 27th or Sunday, May 5th or Flexible';
+var whichWorkDay = 'Which work day Sunday 10/20 or Saturday 10/26 or Flexible';
 
 var required = {
 	"Name of person supplying Info": "Reporter",
